@@ -160,3 +160,7 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+package-lock.json
+
+.idea
