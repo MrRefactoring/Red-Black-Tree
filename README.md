@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/MrRefactoring/Red-Black-Tree.svg?branch=master)](https://travis-ci.org/MrRefactoring/Red-Black-Tree)
+[![Build Status](https://travis-ci.org/MrRefactoring/Red-Black-Tree.svg?branch=master)](https://travis-ci.org/MrRefactoring/red-black-tree-node)
 
 # red-black-tree-node
 A red-black tree written 100% in JavaScript. Works both in node.js and in the browser.
@@ -65,10 +65,12 @@ An array of all the values in the tree
 
 ## `tree.removeMax()`
 Finds and removes the maximum element in the tree
+
 **Returns** removed element
 
 ## `tree.removeMin()`
 Finds and removes the minimum element in the tree
+
 **Returns** removed element
 
 ## `tree.length()`
