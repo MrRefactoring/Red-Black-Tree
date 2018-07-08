@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/MrRefactoring/Red-Black-Tree.svg?branch=master)](https://travis-ci.org/MrRefactoring/Red-Black-Tree)
-[![Coverage Status](https://coveralls.io/repos/github/MrRefactoring/Red-Black-Tree/badge.svg?branch=master)](https://coveralls.io/github/MrRefactoring/Red-Black-Tree?branch=master)
 
 # Red-Black-Tree
 A red-black tree written 100% in JavaScript. Works both in node.js and in the browser.
