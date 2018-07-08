@@ -4,7 +4,7 @@
 /**
  * @author Vladislav Tupikin, 2018
  * @licence MIT
- * @version 1.1.0
+ * @version 1.1.1
  */
 
 const RED   = false;
