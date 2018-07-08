@@ -113,7 +113,7 @@ qunit.test('remove() on small tree', assert => {
     let tree = fillSmallTree();
     tree.remove(15);
     assert.equal(tree.find(15), undefined);
-    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.size())))
+    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.length())))
 });
 
 qunit.skip('remove() on large tree', assert => {
@@ -121,7 +121,7 @@ qunit.skip('remove() on large tree', assert => {
     for (let i = 0; i < 500000; i++){
         tree.remove(randomInt(0, 1000000))
     }
-    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.size())))
+    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.length())))
 });
 
 qunit.test('remove() on \'Hello World!\' tree', assert => {
@@ -131,7 +131,7 @@ qunit.test('remove() on \'Hello World!\' tree', assert => {
     assert.equal(tree.find(15), undefined);
     assert.equal(tree.find(' '), undefined);
     assert.equal(tree.find('w'), undefined);
-    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.size())))
+    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.length())))
 });
 
 // endregion
@@ -259,21 +259,21 @@ qunit.test('contains() on \'Hello World!\' tree test 2', assert => {
 
 // endregion
 
-// region size() tests
+// region length() tests
 
-qunit.test('size() on small tree', assert => {
+qunit.test('length() on small tree', assert => {
     let tree = fillSmallTree();
-    assert.equal(tree.size(), 10)
+    assert.equal(tree.length(), 10)
 });
 
-qunit.test('size() on large tree', assert => {
+qunit.test('length() on large tree', assert => {
     let tree = fillLargeTree();
-    assert.equal(tree.size(), 1000000)
+    assert.equal(tree.length(), 1000000)
 });
 
-qunit.test('size() on \'Hello World!\' tree', assert => {
+qunit.test('length() on \'Hello World!\' tree', assert => {
     let tree = fillHelloWorldTree();
-    assert.equal(tree.size(), 9)
+    assert.equal(tree.length(), 9)
 });
 
 // endregion
@@ -282,41 +282,71 @@ qunit.test('size() on \'Hello World!\' tree', assert => {
 
 qunit.test('height() on small tree', assert => {
     let tree = fillSmallTree();
-    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.size())))
+    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.length())))
 });
 
 qunit.test('height() on large tree', assert => {
     let tree = fillLargeTree();
-    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.size())))
+    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.length())))
 });
 
 qunit.test('height() on \'Hello World!\' tree', assert => {
     let tree = fillHelloWorldTree();
-    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.size())))
+    assert.ok(tree.height() <= Math.ceil(Math.log2(tree.length())))
 });
 
 // endregion
 
-// region inOrder() tests
+// region keys() tests
 
-qunit.test('inOrder() on small tree', assert => {
+qunit.test('keys() on small tree', assert => {
     let tree = fillSmallTree();
-    assert.deepEqual(tree.inOrder(), [10, 20, 30, 40, 50, 18, 15, 25, 38, 28].sort())
+    assert.deepEqual(tree.keys(), [10, 20, 30, 40, 50, 18, 15, 25, 38, 28].sort())
 });
 
-qunit.test('inOrder() on large tree', assert => {
+qunit.test('keys() on large tree', assert => {
     let tree = fillLargeTree();
 
     let sortedArray = [];
     for (let i = 0; i < 1000000; i++)
         sortedArray.push(i)
 
-    assert.deepEqual(tree.inOrder(), sortedArray)
+    assert.deepEqual(tree.keys(), sortedArray)
 });
 
-qunit.test('inOrder() on \'Hello World!\' tree', assert => {
+qunit.test('keys() on \'Hello World!\' tree', assert => {
     let tree = fillHelloWorldTree();
-    assert.deepEqual(tree.inOrder(), ['h', 'e', 'l', 'o', ' ', 'w', 'r', 'd', '!'].sort())
+    assert.deepEqual(tree.keys(), ['h', 'e', 'l', 'o', ' ', 'w', 'r', 'd', '!'].sort())
+});
+
+// endregion
+
+// region values() tests
+
+qunit.test('value() on small tree', assert => {
+    let tree = fillSmallTree();
+    assert.deepEqual(tree.values(), ['10', '20', '30', '40', '50', '18', '15', '25', '38', '28'].sort());
+});
+
+qunit.test('value() on large tree', assert => {
+    let tree = fillLargeTree();
+
+    let cmp = [];
+
+    for (let i = 0; i < 1000000; i++)
+        cmp.push(i.toString())
+
+    assert.deepEqual(tree.values(), cmp);
+});
+
+qunit.test('value() on \'Hello World!\' tree', assert => {
+    let tree = fillHelloWorldTree();
+
+    let cmp = ['h', 'e', 'l', 'o', ' ', 'w', 'r', 'd', '!'].sort();
+    for (let i = 0; i < cmp.length; i++)
+        if (cmp[i] === 'h' || cmp[i] === 'w') cmp[i] = cmp[i].toUpperCase();
+
+    assert.deepEqual(tree.values(), cmp);
 });
 
 // endregion

@@ -1,6 +1,6 @@
 {
-  "name": "Red-Black-Tree",
-  "version": "1.0.0",
+  "name": "red-black-tree-node",
+  "version": "1.1.0",
   "description": "Class implementation of the binary search algorithm algorithm. As a basis, the principle of a self-balancing red-black tree was adopted.",
   "main": "RedBlackTree.js",
   "directories": {
@@ -12,7 +12,6 @@
   "author": "Vladislav Tupikin",
   "license": "MIT",
   "dependencies": {
-    "node-cmd": "^3.0.0",
     "qunit": "^2.6.1"
   }
 }

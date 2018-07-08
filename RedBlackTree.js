@@ -4,7 +4,7 @@
 /**
  * @author Vladislav Tupikin, 2018
  * @licence MIT
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 const RED   = false;
@@ -13,7 +13,7 @@ const BLACK = !RED;
 class RedBlackTree{
 
     constructor(key, value){
-        this.root = key != null || key !== undefined ? new Node(BLACK, key, value): null;
+        this._root = key != null || key !== undefined ? new Node(BLACK, key, value): null;
     }
 
     // region Basic functionality
@@ -32,8 +32,8 @@ class RedBlackTree{
         if (value == null || value === undefined) return this.remove(key);
 
         // Searching the place to insertion, inserting pair and rebalancing of the tree
-        this.root       = Node.insert(this.root, key, value);
-        this.root.color = BLACK;  // Marking the root of the tree as black
+        this._root       = Node.insert(this._root, key, value);
+        this._root.color = BLACK;  // Marking the _root of the tree as black
     }
 
     /**
@@ -42,7 +42,7 @@ class RedBlackTree{
      * @returns value that corresponds to the key. If such a value is not found, then {@code undefined} is returned
      */
     find(key){
-        let currentNode = this.root;  // Start point for tree walk
+        let currentNode = this._root;  // Start point for tree walk
         while (!Node.isLeaf(currentNode)){  // Walking of the tree, until node not a leaf (analog of binary search)
             let cmp = RedBlackTree.compare(key, currentNode.key);
             if      (cmp < 0) currentNode = currentNode.left;
@@ -62,11 +62,11 @@ class RedBlackTree{
         if (key == null || key === undefined) throw Exceptions.IllegalArgumentException(`argument is ${key}`);
         if (!this.contains(key))              return;
 
-        // If both children of root are black, set root to red
-        if (!Node.isRed(this.root.left) && !Node.isRed(this.root.right)) this.root.color = RED;
+        // If both children of _root are black, set _root to red
+        if (!Node.isRed(this._root.left) && !Node.isRed(this._root.right)) this._root.color = RED;
 
-        this.root = Node.remove(this.root, key);  // Searching node for removing, removing and rebalancing of the tree
-        if (!Node.isLeaf(this.root)) this.root.color = BLACK;  // Marking root as black
+        this._root = Node.remove(this._root, key);  // Searching node for removing, removing and rebalancing of the tree
+        if (!Node.isLeaf(this._root)) this._root.color = BLACK;  // Marking _root as black
     }
 
     // endregion
@@ -74,19 +74,19 @@ class RedBlackTree{
     // region Additional functionality
 
     /**
-     * Passes from the root to the rightmost leaf and returns its key
+     * Passes from the _root to the rightmost leaf and returns its key
      * @returns maximal key in the tree
      */
     findMax(){
-        return Node.max(this.root).key;
+        return Node.max(this._root).key;
     }
 
     /**
-     * Passes from the root to the leftmost leaf and returns its key
+     * Passes from the _root to the leftmost leaf and returns its key
      * @returns minimal key in the tree
      */
     findMin() {
-        return Node.min(this.root).key;
+        return Node.min(this._root).key;
     }
 
     /**
@@ -123,15 +123,15 @@ class RedBlackTree{
      * @returns {number}
      */
     height(){
-        return Node.height(this.root)
+        return Node.height(this._root)
     }
 
     /**
      * Returns the number of children in the tree
      * @returns {number}
      */
-    size(){
-        return Node.size(this.root)
+    length(){
+        return Node._length(this._root)
     }
 
     // endregion
@@ -139,14 +139,51 @@ class RedBlackTree{
     // region Common part
 
     /**
-     * Returns sorted array
+     * Returns sorted array of keys
      * @return {Array}
      */
-    inOrder(){
-        if (!this.root) return [];
+    keys(){
+        if (!this._root) return [];
         let array = [];
-        Node.inOrder(this.root, array);
+        Node.keys(this._root, array);
         return array;
+    }
+
+    /**
+     * Returns array of values
+     * @return {Array}
+     */
+    values(){
+        if (!this._root) return [];
+        let nodes = [];
+        Node.getNodes(this._root, nodes);
+        for (let i = 0; i < nodes.length; i++)
+            nodes[i] = nodes[i].value
+        return nodes
+    }
+
+    /**
+     * Return _root node
+     * @return {null || Node}
+     */
+    root(){
+        return this._root;
+    }
+
+    /**
+     * Return left child of _root;
+     * @return {null || Node}
+     */
+    left(){
+        return this._root.left;
+    }
+
+    /**
+     * Return right child of _root;
+     * @return {null || Node}
+     */
+    right(){
+        return this._root.right;
     }
 
     /**
@@ -154,9 +191,9 @@ class RedBlackTree{
      * @return {String} json representation
      */
     toJson(){
-        if (!this.root) return JSON.stringify([]);
+        if (!this._root) return JSON.stringify([]);
         let nodes = [];
-        Node.inOrderNode(this.root, nodes);
+        Node.getNodes(this._root, nodes);
         for (let i = 0; i < nodes.length; i++)
             nodes[i] = {key: nodes[i].key, value: nodes[i].value}
         return JSON.stringify(nodes);
@@ -172,6 +209,14 @@ class RedBlackTree{
             this.insert(element.key, element.value)
     }
 
+    /**
+     * Clone this tree
+     * @return {RedBlackTree}
+     */
+    clone(){
+        return new RedBlackTree().fromJson(this.toJson());
+    }
+
     static compare(a, b){
         if (typeof a === 'string' || typeof b === 'string'){
             a = a.toString();
@@ -181,6 +226,19 @@ class RedBlackTree{
         else if (a > b) return  1;
         else            return  0
     }
+
+    /**
+     * Standard iterator
+     * @return {{next: (function(): {value: *, done: boolean})}}
+     */
+    [Symbol.iterator]() {
+        let index = -1;
+        let data = this.values();
+
+        return {
+            next: () => ({ value: data[++index], done: !(index in data) })
+        };
+    };
 
     // endregion
 
@@ -196,7 +254,7 @@ class Node{
         this.left = null;
         this.right = null;
 
-        this._size = size || 1;
+        this.length = size || 1;
     }
 
     // region Insertion region
@@ -216,7 +274,7 @@ class Node{
         if (Node.isRed(node.left)  &&  Node.isRed(node.left.left)) node = Node.rotateRight(node);
         if (Node.isRed(node.left)  &&  Node.isRed(node.right))     Node.flipColors(node);
 
-        node._size = Node.size(node.left) + Node.size(node.right) + 1;
+        node.length = Node._length(node.left) + Node._length(node.right) + 1;
         return node;
     }
 
@@ -226,8 +284,8 @@ class Node{
         currentNode.left       = node;
         currentNode.color      = currentNode.left.color;
         currentNode.left.color = RED;
-        currentNode._size       = node._size;
-        node._size              = Node.size(node.left) + Node.size(node.right) + 1;
+        currentNode.length       = node.length;
+        node.length              = Node._length(node.left) + Node._length(node.right) + 1;
         return currentNode;
     }
 
@@ -238,9 +296,9 @@ class Node{
         currentNode.right       = node;
         currentNode.color       = currentNode.right.color;
         currentNode.right.color = RED;
-        currentNode._size        = node._size;
+        currentNode.length        = node.length;
 
-        node._size               = Node.size(node.left) + Node.size(node.right) + 1;
+        node.length               = Node._length(node.left) + Node._length(node.right) + 1;
         return currentNode;
     }
 
@@ -323,7 +381,7 @@ class Node{
         if (Node.isRed(node.left) && Node.isRed(node.left.left)) node = Node.rotateRight(node);
         if (Node.isRed(node.left) && Node.isRed(node.right))     Node.flipColors(node);
 
-        node._size = Node.size(node.left) + Node.size(node.right) + 1;
+        node.length = Node._length(node.left) + Node._length(node.right) + 1;
         return node;
     }
 
@@ -360,8 +418,8 @@ class Node{
      * @param node the node that needs to know the number of children
      * @returns {number}
      */
-    static size(node){
-        return node ? node._size: 0;
+    static _length(node){
+        return node ? node.length: 0;
     }
 
     /**
@@ -396,24 +454,24 @@ class Node{
      * @param array - output array
      * @return {Array}
      */
-    static inOrder(node, array){
+    static keys(node, array){
         if (!node) return;
-        Node.inOrder(node.left, array);
+        Node.keys(node.left, array);
         array.push(node.key);
-        Node.inOrder(node.right, array);
+        Node.keys(node.right, array);
     }
 
     /**
      * Passes through a tree and collects nodes a sorted array
-     * @param node the start node
-     * @param array - output array
+     * @param startNode the start node
+     * @param outputArray - output array
      * @return {Array}
      */
-    static inOrderNode(node, array){
-        if (!node) return;
-        Node.inOrderNode(node.left, array);
-        array.push(node);
-        Node.inOrderNode(node.right, array);
+    static getNodes(startNode, outputArray){
+        if (!startNode) return;
+        Node.getNodes(startNode.left, outputArray);
+        outputArray.push(startNode);
+        Node.getNodes(startNode.right, outputArray);
     }
 
     static compare(a, b){
