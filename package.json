@@ -1,8 +1,8 @@
 {
-  "name": "BinarySearchTree",
+  "name": "Red-Black-Tree",
   "version": "1.0.0",
-  "description": "The algorithm of a self-balancing tree is used (Red-Black tree)",
-  "main": "index.js",
+  "description": "Class implementation of the binary search algorithm algorithm. As a basis, the principle of a self-balancing red-black tree was adopted.",
+  "main": "RedBlackTree.js",
   "directories": {
     "test": "test"
   },
