@@ -1,6 +1,6 @@
 {
   "name": "redBlackTree-node",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The algorithm of a self-balancing tree is used (Red-Black tree)",
   "author": "Vladislav Tupikin",
   "license": "MIT",
@@ -18,7 +18,5 @@
     "node-cmd": "^3.0.0",
     "qunit": "^2.6.1"
   },
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }
