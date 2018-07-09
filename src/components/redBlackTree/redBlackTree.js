@@ -4,7 +4,7 @@
 /**
  * @author Vladislav Tupikin, 2018
  * @licence MIT
- * @version 1.1.1
+ * @version 1.1.5
  */
 
 const {Node}       = require('./node');
@@ -247,4 +247,4 @@ class RedBlackTree{
 
 }
 
-module.exports = {RedBlackTree};
+module.exports = RedBlackTree;

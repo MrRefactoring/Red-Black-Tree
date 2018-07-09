@@ -1,18 +1,18 @@
-[![Build Status](https://travis-ci.org/MrRefactoring/redBlackTree-node.svg?branch=master)](https://travis-ci.org/MrRefactoring/redBlackTree-node)
+[![Build Status](https://travis-ci.org/MrRefactoring/red-black-tree-node.svg?branch=master)](https://travis-ci.org/MrRefactoring/red-black-tree-node)
 
-# redBlackTree-node
+# red-black-tree-node
 A red-black tree written 100% in JavaScript. Works both in node.js and in the browser.
 
 The classical variant of the representation of the red-black tree algorithm is the RedBlackTree class
 # Install
 ```text
-npm install redBlackTree-node
+npm install red-black-tree-node
 ```
 # Example
 ```js
-let {RedBlackTree} = require('redBlackTree-node');
+let Tree = require('red-black-tree-node');
 
-let tree = new RedBlackTree();
+let tree = new Tree();
 
 // Insert some items to tree
 tree.insert('hello', 'Hello');
@@ -28,8 +28,11 @@ console.log(tree.find('hello'), tree.find('world'));  // output: Hello World!
 
 # API
 ```js
-let {RedBlackTree} = require('redBlackTree-node');
+let Tree = require('red-black-tree-node');
 ```
+
+# Path to code
+Path to `Tree` sources is `src/components/redBlackTree/redBlackTree.js`
 
 # Methods
 
@@ -107,7 +110,9 @@ Anybody tree can be iterating
 
 #### Example:
 ```js
-let tree = new RedBlackTree();
+const Tree = require('red-black-tree-node');
+
+let tree = new Tree();
 
 tree.insert(1, 'hello');
 tree.insert(2, 'world!');

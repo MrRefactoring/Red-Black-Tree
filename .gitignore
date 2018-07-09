@@ -5,4 +5,5 @@
 .DS-Store
 
 # Node
+node_modules/
 package-lock.json
