@@ -2,10 +2,10 @@
 'use strict';
 
 const qunit = require('qunit');
-const {RedBlackTree} = require('../src/components/redBlackTree/redBlackTree');
+const Tree = require('../src/components/redBlackTree/redBlackTree');
 
 function fillSmallTree(){
-    let tree = new RedBlackTree();
+    let tree = new Tree();
 
     tree.insert(10, '10');
     tree.insert(20, '20');
@@ -22,7 +22,7 @@ function fillSmallTree(){
 }
 
 function fillLargeTree(){
-    let tree = new RedBlackTree();
+    let tree = new Tree();
 
     for (let i = 0; i < 1000000; i++){
         tree.insert(i, i.toString())
@@ -32,7 +32,7 @@ function fillLargeTree(){
 }
 
 function fillHelloWorldTree(){
-    let tree = new RedBlackTree();
+    let tree = new Tree();
 
     tree.insert('h', 'H');
     tree.insert('e', 'e');
