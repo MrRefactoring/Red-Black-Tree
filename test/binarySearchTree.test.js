@@ -2,7 +2,7 @@
 'use strict';
 
 const qunit = require('qunit');
-const {RedBlackTree} = require('../RedBlackTree');
+const {RedBlackTree} = require('../src/components/redBlackTree/redBlackTree');
 
 function fillSmallTree(){
     let tree = new RedBlackTree();

@@ -1,16 +1,16 @@
-[![Build Status](https://travis-ci.org/MrRefactoring/Red-Black-Tree.svg?branch=master)](https://travis-ci.org/MrRefactoring/red-black-tree-node)
+[![Build Status](https://travis-ci.org/MrRefactoring/redBlackTree-node.svg?branch=master)](https://travis-ci.org/MrRefactoring/redBlackTree-node)
 
-# red-black-tree-node
+# redBlackTree-node
 A red-black tree written 100% in JavaScript. Works both in node.js and in the browser.
 
 The classical variant of the representation of the red-black tree algorithm is the RedBlackTree class
 # Install
 ```text
-npm install red-black-tree-node
+npm install redBlackTree-node
 ```
 # Example
 ```js
-let {RedBlackTree} = require('red-black-tree-node');
+let {RedBlackTree} = require('redBlackTree-node');
 
 let tree = new RedBlackTree();
 
@@ -28,7 +28,7 @@ console.log(tree.find('hello'), tree.find('world'));  // output: Hello World!
 
 # API
 ```js
-let {RedBlackTree} = require('red-black-tree-node');
+let {RedBlackTree} = require('redBlackTree-node');
 ```
 
 # Methods
