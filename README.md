@@ -52,7 +52,7 @@ Removes the item with `key` in the tree
 
 **Complexity:** `O(log(n))`
 
-Exist small disbalance (if remove 400 000 random elements from 1 000 000 then height of tree is 26, not 19, that need). [Issue]('https://github.com/MrRefactoring/red-black-tree-node/issues/1')
+Exist small disbalance (if remove 400 000 random elements from 1 000 000 then height of tree is 26, not 19, that need). [Issue](https://github.com/MrRefactoring/red-black-tree-node/issues/1)
 
 ## `tree.find(key)`
 Retrieves the value associated to the given `key`
@@ -105,7 +105,7 @@ Finds and removes the minimum element in the tree
 ## `tree.height()`
 **Complexity:** `O(n)` :(
 
-You can find a faster algorithm, I'll be glad if you submit your solution or the idea [here]('https://github.com/MrRefactoring/red-black-tree-node/issues/2')
+You can find a faster algorithm, I'll be glad if you submit your solution or the idea [here](https://github.com/MrRefactoring/red-black-tree-node/issues/2)
 
 **Returns** current tree height
 
