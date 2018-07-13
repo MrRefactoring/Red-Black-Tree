@@ -1,10 +1,4 @@
-class Exceptions{
-
-    static IllegalArgumentException(message){
-        this.name = 'IllegalArgumentException';
-        this.message = message;
-    }
-
-}
-
-module.exports = {Exceptions};
+module.exports.IllegalArgumentException = function IllegalArgumentException(message) {
+  this.name = 'IllegalArgumentException';
+  this.message = message;
+};

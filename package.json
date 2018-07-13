@@ -1,6 +1,6 @@
 {
   "name": "red-black-tree-node",
-  "version": "1.1.6",
+  "version": "1.2.0",
   "description": "The algorithm of a self-balancing tree is used (Red-Black tree)",
   "author": "Vladislav Tupikin",
   "license": "MIT",
@@ -10,12 +10,17 @@
     "test": "test"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "test": "npm i qunit && qunit"
+    "test": "set NODE_ENV=test&&jest",
+    "test-coverage": "npm test -- --coverage"
   },
   "devDependencies": {
-    "node-cmd": "^3.0.0",
-    "qunit": "^2.6.1"
+    "eslint": "4.14.0",
+    "babel-eslint": "^8.2.6",
+    "eslint-config-airbnb": "16.1.0",
+    "eslint-loader": "2.0.0",
+    "eslint-plugin-jest": "^21.17.0",
+    "eslint-plugin-import": "^2.13.0",
+    "jest": "^23.4.0"
   },
   "dependencies": {},
   "keywords": [

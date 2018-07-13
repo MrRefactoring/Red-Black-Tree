@@ -1,259 +1,129 @@
-#!/usr/bin/env node
-'use strict';
+const { compare } = require('../../common/compare');
+const { red, black } = require('../../CONFIG.json');
 
-const RED   = false;
-const BLACK = !RED;
+class Node {
+  constructor(key, value, color, parent) {
+    this.key = key;
+    this.value = value;
 
-class Node{
+    this.parent = parent;
+    this.left = null;
+    this.right = null;
 
-    constructor(color, key, value){
-        this.key    = key;
-        this.value  = value;
-        this.color  = color;
+    this.color = color;
+    this._length = 1;
+  }
 
-        this.left   = null;
-        this.right  = null;
+  insert(key, value) {
+    const cmp = compare(key, this.key);
 
-        this.length = 1;
-    }
+    if (cmp < 0) {
+      if (this.left) {this.left.insert(key, value);} else {this.left = new Node(key, value, red, this);}
+    } else if (cmp > 0) {
+      if (this.right) {this.right.insert(key, value);} else {this.right = new Node(key, value, red, this);}
+    } else this.value = value;
 
-    // region Insertion region
+    this.rebalance(); // Restore balance in the tree
+    this.recalculateLength();
+  }
 
-    static insert(node, key, value){
-        if (!node) return new Node(RED, key, value);
+  rebalance() { // Restore balance in the tree
+    if (this.right && this.left && this.right.isRed() && !this.left.isRed()) this.rotateLeft();
+    if (this.left && this.left.left && this.left.isRed() && this.left.left.isRed()) this.rotateRight();
+    if (this.left && this.right && this.left.isRed() && this.right.isRed()) this.flipColors();
+  }
 
-        let cmp = Node.compare(key, node.key);
+  recalculateLength() {
+    this._length = ((this.left ? this.left.length() : 0) + (this.right ? this.right.length() : 0) + 1);
+  }
 
-        if      (cmp < 0) node.left  = Node.insert(node.left,  key, value);
-        else if (cmp > 0) node.right = Node.insert(node.right, key, value);
-        else              node.value = value;
+  rotateLeft() {
+    // Redefining relationships
+    const pivot = this.right; // Define new root
+    this.right = pivot.left;
+    pivot.left = this.clone(); // copy
 
+    // Redefining parents
+    pivot.parent = this.parent;
+    pivot.right.parent = pivot;
+    pivot.left.parent = pivot;
+    pivot.left.left.parent = pivot.left;
+    pivot.left.right.parent = pivot.left;
 
-        // fix-up any right-leaning links
-        if (Node.isRed(node.right) && !Node.isRed(node.left))      node = Node.rotateLeft (node);
-        if (Node.isRed(node.left)  &&  Node.isRed(node.left.left)) node = Node.rotateRight(node);
-        if (Node.isRed(node.left)  &&  Node.isRed(node.right))     Node.flipColors(node);
+    // Redefining colors
+    pivot.color = black;
+    pivot.left.color = red;
 
-        node.length = Node._length(node.left) + Node._length(node.right) + 1;
-        return node;
-    }
+    this.setNode(pivot);
+  }
 
-    static rotateLeft(node){
-        let currentNode        = node.right;
-        node.right             = currentNode.left;
-        currentNode.left       = node;
-        currentNode.color      = currentNode.left.color;
-        currentNode.left.color = RED;
-        currentNode.length       = node.length;
-        node.length              = Node._length(node.left) + Node._length(node.right) + 1;
-        return currentNode;
-    }
+  rotateRight() {
+    // Redefining relationships
+    const pivot = this.left; // Define new root
+    this.left = pivot.right;
+    pivot.right = this.clone(); // copy
 
-    static rotateRight(node){
-        let currentNode         = node.left;
-        node.left               = currentNode.right;
-        currentNode.right       = node;
-        currentNode.right       = node;
-        currentNode.color       = currentNode.right.color;
-        currentNode.right.color = RED;
-        currentNode.length        = node.length;
+    console.log(pivot);
 
-        node.length               = Node._length(node.left) + Node._length(node.right) + 1;
-        return currentNode;
-    }
+    // Redefining parents
+    pivot.parent = this.parent;
+    pivot.left.parent = pivot;
+    pivot.right.parent = pivot;
+    pivot.right.left.parent = pivot.right;
+    pivot.right.right.parent = pivot.right;
 
-    static flipColors(node){
-        node.color = !node.color;
-        node.left.color = !node.left.color;
-        node.right.color = !node.right.color;
-    }
+    // Redefining colors
+    pivot.color = black;
+    pivot.right.color = red;
 
-    // endregion
+    this.setNode(pivot);
+  }
 
-    // region Remove region
+  setNode(node) {
+    this.key = node.key;
+    this.value = node.value;
 
-    /**
-     * Removes a key-value pair from a tree
-     * @param node - the node from the subtree of which you want to delete the element
-     * @param key the key
-     * @returns {Node} new balanced tree
-     */
-    static remove(node, key){
-        if (Node.compare(key, node.key) < 0) {
-            if (!Node.isRed(node.left) && !Node.isRed(node.left.left)) node = Node.moveRedLeft(node);
-            node.left = Node.remove(node.left, key);
-        } else {
-            if (Node.isRed(node.left))
-                node = Node.rotateRight(node);
-            if (Node.compare(key, node.key) === 0 && (node.right == null))
-                return null;
-            if (!Node.isRed(node.right) && !Node.isRed(node.right.left))
-                node = Node.moveRedRight(node);
-            if (Node.compare(key, node.key) === 0) {
-                let minimalNode = Node.min(node.right);
-                node.key   = minimalNode.key;
-                node.val   = minimalNode.val;
-                node.right = Node.remove(node.right, Node.min(node.right).key);
-            } else
-                node.right = Node.remove(node.right, key);
-        }
-        return Node.balance(node);
-        // while (node){
-        //     let cmp = Node.compare(key, node.key);
-        //     if      (cmp < 0) node = node.left;
-        //     else if (cmp > 0) node = node.right;
-        //     else              break;
-        // }
-        // if (!node) return;
-        // if (!node.left)  // case 1
-    }
+    this.parent = node.parent;
+    this.left = node.left;
+    this.right = node.right;
 
-    /**
-     * Assuming that node is red and both node.left and node.left.left are black,
-     * make node.left or one of its children red.
-     * @param node the target node
-     * @returns {Node} new connection of nodes
-     */
-    static moveRedLeft(node){
-        Node.flipColors(node);
-        if (Node.isRed(node.right.left)) {
-            node.right = Node.rotateRight(node.right);
-            node =       Node.rotateLeft (node);
-            Node.flipColors(node);
-        }
-        return node;
-    }
+    this.color = node.color;
+    this._length = node._length;
+  }
 
-    /**
-     * Assuming that node is red and both node.right and node.right.left are black,
-     * make node.right or one of its children red.
-     * @param node the target node
-     * @returns {Node} new connection of nodes
-     */
-    static moveRedRight(node){
-        Node.flipColors(node);
-        if (Node.isRed(node.left.left)) {
-            node = Node.rotateRight(node);
-            Node.flipColors(node);
-        }
-        return node;
-    }
+  flipColors() {
+    this.color = this.color === red ? black : red;
+    this.left.color = this.left.color === red ? black : red;
+    this.right.color = this.right.color === red ? black : red;
+  }
 
-    /**
-     * Balances the tree
-     * @param node the node that needs balance
-     * @returns {Node} rebalanced node
-     */
-    static balance(node){
-        if (Node.isRed(node.right))                              node = Node.rotateLeft (node);
-        if (Node.isRed(node.left) && Node.isRed(node.left.left)) node = Node.rotateRight(node);
-        if (Node.isRed(node.left) && Node.isRed(node.right))     Node.flipColors(node);
+  isRed() {
+    return this.color === red;
+  }
 
-        node.length = Node._length(node.left) + Node._length(node.right) + 1;
-        return node;
-    }
+  isBlack() {
+    return this.color === black;
+  }
 
-    // endregion
+  isLeaf() {
+    return !this.left && !this.right;
+  }
 
-    // region Helpers
+  length() {
+    return this._length;
+  }
 
-    /**
-     * Going down to the most left leaf from the transferred node and returns it
-     * @param node the start node
-     * @returns minimal node
-     */
-    static min(node) {
-        if (node == null || node === undefined) return undefined;
-        while (node.left)  // While can select left subtree
-            node = node.left;
-        return node;
-    }
+  height() {
+    return Math.max((this.left ? this.left.height() : 0), (this.right ? this.right.height() : 0)) + 1;
+  }
 
-    /**
-     * Going down to the most right leaf from the transferred node and returns it
-     * @param node the start node
-     * @returns maximal node
-     */
-    static max(node){
-        if (node == null || node === undefined) return undefined;
-        while (node.right)  // While can select right subtree
-            node = node.right;
-        return node;
-    }
-
-    /**
-     * Returns the number of children of this node
-     * @param node the node that needs to know the number of children
-     * @returns {number}
-     */
-    static _length(node){
-        return node ? node.length: 0;
-    }
-
-    /**
-     * Returns the maximum node height (Indicates how well balanced)
-     * @returns {number}
-     */
-    static height(node){
-        return node ? Math.max(Node.height(node.left), Node.height(node.right)) + 1: -1;
-    }
-
-    /**
-     * Returns the {@code true} if this node is red otherwise returns {@code false}
-     * @param node
-     * @returns {boolean}
-     */
-    static isRed(node){
-        return node ? node.color === RED: false;
-    }
-
-    /**
-     * Returns the {@code true} if this node is leaf otherwise returns {@code false}
-     * @param node
-     * @returns {boolean}
-     */
-    static isLeaf(node){
-        return node ? !node.left && !node.right: true;
-    }
-
-    /**
-     * Passes through a tree and collects a sorted array
-     * @param node the start node
-     * @param array - output array
-     * @return {Array}
-     */
-    static keys(node, array){
-        if (!node) return;
-        Node.keys(node.left, array);
-        array.push(node.key);
-        Node.keys(node.right, array);
-    }
-
-    /**
-     * Passes through a tree and collects nodes a sorted array
-     * @param startNode the start node
-     * @param outputArray - output array
-     * @return {Array}
-     */
-    static getNodes(startNode, outputArray){
-        if (!startNode) return;
-        Node.getNodes(startNode.left, outputArray);
-        outputArray.push(startNode);
-        Node.getNodes(startNode.right, outputArray);
-    }
-
-    static compare(a, b){
-        if (typeof a === 'string' || typeof b === 'string'){
-            a = a.toString();
-            b = b.toString();
-        }
-        if      (a < b) return -1;
-        else if (a > b) return  1;
-        else            return  0;
-    }
-
-    // endregion
-
+  clone() {
+    const node = new Node(this.key, this.value, this.color, this.parent);
+    node.left = this.left;
+    node.right = this.right;
+    node._length = this._length;
+    return node;
+  }
 }
 
-module.exports = {Node};
+module.exports.Node = Node;
