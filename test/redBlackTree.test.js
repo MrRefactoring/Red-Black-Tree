@@ -1,8 +1,5 @@
-#!/usr/bin/env node
-'use strict';
-
 const qunit = require('qunit');
-const Tree = require('../src/components/redBlackTree/redBlackTree');
+const Tree = require('../src');
 
 function fillSmallTree(){
     let tree = new Tree();

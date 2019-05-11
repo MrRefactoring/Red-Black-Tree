@@ -5,17 +5,18 @@
   "author": "Vladislav Tupikin",
   "license": "MIT",
   "repository": "https://github.com/MrRefactoring/red-black-tree-node",
-  "main": "src/components/redBlackTree/redBlackTree.js",
-  "directories": {
-    "test": "test"
-  },
+  "main": "out/index.js",
+  "types": "out/index.d.ts",
   "scripts": {
-    "start": "node src/index.js",
-    "test": "npm i qunit && qunit"
+    "compile": "tsc"
   },
   "devDependencies": {
-    "node-cmd": "^3.0.0",
-    "qunit": "^2.6.1"
+    "@types/jest": "^24.0.12",
+    "@types/node": "^12.0.0",
+    "jest": "^24.8.0",
+    "qunit": "^2.9.2",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
   },
   "dependencies": {},
   "keywords": [

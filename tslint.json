@@ -1,0 +1,25 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "quotemark": [true, "single"],
+    "object-literal-sort-keys": false,
+    "trailing-comma": false,
+    "member-ordering": false,
+    "prefer-const": true,
+    "no-var-keyword": true,
+    "eofline": true,
+    "indent": [true, "spaces", 2],
+    "semicolon": true,
+    "no-consecutive-blank-lines": true,
+    "max-line-length": false,
+    "variable-name": false
+  },
+  "linterOptions": {
+    "exclude": [
+        "out/**"
+    ]
+  }
+}

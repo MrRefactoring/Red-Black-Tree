@@ -4,7 +4,7 @@
 const RED   = false;
 const BLACK = !RED;
 
-class Node{
+class Node {
 
     constructor(color, key, value){
         this.key    = key;
