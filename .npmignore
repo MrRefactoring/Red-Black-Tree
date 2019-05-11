@@ -1,2 +1,10 @@
 test/
 src/
+coverage/
+node_modules/
+
+jest.config.js
+.editorconfig
+.travis.yml
+tsconfig.json
+tslint.json
