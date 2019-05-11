@@ -28,6 +28,8 @@ export class RedBlackTree {
     } else {
       lastNode.value = value;
     }
+
+    lastNode.forwardBalancer();
   }
 
   public find(key: string): any | undefined {
@@ -59,10 +61,6 @@ export class RedBlackTree {
 
         return node;
       }
-
-      if (rebalance && node) {
-        node.forwardBalancer();
-      }
     }
 
     return node || previous;
@@ -78,5 +76,3 @@ export class RedBlackTree {
     }
   }
 }
-
-export * from './node';
