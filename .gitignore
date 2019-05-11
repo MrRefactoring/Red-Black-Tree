@@ -7,3 +7,6 @@ package-lock.json
 
 # Typescript out
 out/
+
+# Jest
+coverage/

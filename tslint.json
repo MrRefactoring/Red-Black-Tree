@@ -15,7 +15,8 @@
     "semicolon": true,
     "no-consecutive-blank-lines": true,
     "max-line-length": false,
-    "variable-name": false
+    "variable-name": false,
+    "arrow-parens": false
   },
   "linterOptions": {
     "exclude": [

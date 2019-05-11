@@ -33,7 +33,7 @@ export class RedBlackTree {
   public find(key: string): any | undefined {
     const node = this.findLastNode(key);
 
-    return node && node.key === key && node.value;
+    return node && node.key === key && node.value || undefined;
   }
 
   private findLastNode(
